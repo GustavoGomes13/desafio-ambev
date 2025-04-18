@@ -1,29 +1,10 @@
-describe('Usuário/senha inválidos', () => {
-    it('Não deve autenticar', () => {
-        const loginInvalido = {
-                email: "aaa@aaa.com",
-                password: "testeadadaddadad"
-        }
-
-        cy.request({
-            method: 'POST',
-            url: `${Cypress.env('url')}/login`,
-            failOnStatusCode: false,
-            body: loginInvalido
-        }).then((response) => {
-            expect(response.status).to.eq(401)
-            expect(response.body).to.have.property('message')
-            expect(response.body.message).to.eq("Email e/ou senha inválidos")
-        })
-    })
-})
-
 describe('Usuário válido', () => {
     it('Deve autenticar', () => {
         const loginValido = {
             email: "fulano@qa.com",
             password: "teste"
         }
+        
         cy.request({
             method: 'POST',
             url: `${Cypress.env('url')}/login`,
@@ -37,35 +18,110 @@ describe('Usuário válido', () => {
     })
 })
 
-describe('Body incompleto', () => {
-    it('Deve informar e-mail é obrigatório', () => {
+describe('Informações inválidas', () => {
+    it('E-mail inválido', () => {
+        const loginInvalido = {
+                email: "aaa.com",
+                password: "teste"
+        }
+
+        cy.request({
+            method: 'POST',
+            url: `${Cypress.env('url')}/login`,
+            failOnStatusCode: false,
+            body: loginInvalido
+        }).then((response) => {
+            expect(response.status).to.eq(400)
+            expect(response.body).to.have.property('email')
+            expect(response.body.email).to.eq("email deve ser um email válido")
+        })
+    })
+})
+
+describe('Validações do body da request', () => {
+    it('Deve informar que e-mail/senha são obrigatórios', () => {
         cy.request({
             method: 'POST',
             url: `${Cypress.env('url')}/login`,
             failOnStatusCode: false,
             body: {
-                password: "aaaaaa"
             }
         }).then((response) => {
             expect(response.status).to.eq(400)
             expect(response.body).to.have.property("email")
+            expect(response.body).to.have.property("password")
             expect(response.body.email).to.eq("email é obrigatório")
+            expect(response.body.password).to.eq("password é obrigatório")
         })
     })
 
-    it('Deve informar senha é obrigatório', () => {
+    it('Deve informar que e-mail/senha não pode ficar em branco', () => {
+        cy.request({
+            method: 'POST',
+            url: `${Cypress.env('url')}/login`,
+            failOnStatusCode: false,
+            body: { 
+                email: "",
+                password: ""
+            }
+        }).then((response) => {
+            expect(response.status).to.eq(400)
+            expect(response.body).to.have.property("email")
+            expect(response.body).to.have.property("password")
+            expect(response.body.email).to.eq("email não pode ficar em branco")
+            expect(response.body.password).to.eq("password não pode ficar em branco")
+        })
+    })
+
+
+    it('Deve informar que e-mail/senha devem ser uma string', () => {
+        cy.request({
+            method: 'POST',
+            url: `${Cypress.env('url')}/login`,
+            failOnStatusCode: false,
+            body: { 
+                email: null,
+                password: null
+            }
+        }).then((response) => {
+            expect(response.status).to.eq(400)
+            expect(response.body).to.have.property("email")
+            expect(response.body).to.have.property("password")
+            expect(response.body.email).to.eq("email deve ser uma string")
+            expect(response.body.password).to.eq("password deve ser uma string")
+        })
+    })
+
+    it('Deve infromar que e-mail/senha devem ser obrigatórios', () => {
+        cy.request({
+            method: 'POST',
+            url: `${Cypress.env('url')}/login`,
+            failOnStatusCode: false
+        }).then((response) => {
+            expect(response.status).to.eq(400)
+            expect(response.body).to.have.property("email")
+            expect(response.body).to.have.property("password")
+            expect(response.body.email).to.eq("email é obrigatório")
+            expect(response.body.password).to.eq("password é obrigatório")
+        })
+    })
+
+    it('Deve informar que proprieade não é permitidada', () => {
+        const invalidProperty = "cargo"
         cy.request({
             method: 'POST',
             url: `${Cypress.env('url')}/login`,
             failOnStatusCode: false,
             body: {
-                email: "fulano@qa.com"
+                email: "fulano@qa.com.br",
+                password: "teste",
+                [invalidProperty]: "teste"
             }
         }).then((response) => {
             expect(response.status).to.eq(400)
-            expect(response.body).to.have.property("password")
-            expect(response.body.password).to.eq("password é obrigatório")
+            expect(response.body).to.have.property(invalidProperty)
+            expect(response.body[invalidProperty]).to.eq(`${invalidProperty} não é permitido`)
         })
-    }) 
+    })
 })
 

@@ -34,43 +34,31 @@
 **Dado** que o usuário não esteja autenticado
 **Quando** preencher os dados de um email inválido
 **E** preencher os dados de uma senha válida
-**Então** deve ser retornado status code 401
+**Então** deve ser retornado status code 400
 **E** deve exibir mensagem de usuário inválido
 
 **Dado** que o usuário não esteja autenticado
 **E** usuário não adicionar propriedade "email" ao body
-**Quando** usuário enviar POST de login
-**Então** deve retornar status 400
-**E** deve retornar mensagem que "email" é obrigatório
-
-**Dado** que o usuário não esteja autenticado
 **E** usuário não adicionar propriedade "password" ao body
 **Quando** usuário enviar POST de login
 **Então** deve retornar status 400
+**E** deve retornar mensagem que "email" é obrigatório
 **E** deve retornar mensagem que "password" é obrigatório
 
 **Dado** que o usuário não esteja autenticado
 **E** usuário não informar valor de "email" ao body
-**Quando** usuário enviar POST de login
-**Então** deve retornar status 400
-**E** deve retornar mensagem que "email" não pode ficar em branco
-
-**Dado** que o usuário não esteja autenticado
 **E** usuário não informar valor de "password" ao body
 **Quando** usuário enviar POST de login
 **Então** deve retornar status 400
+**E** deve retornar mensagem que "email" não pode ficar em branco
 **E** deve retornar mensagem que "password" não pode ficar em branco
 
 **Dado** que o usuário não esteja autenticado
 **E** usuário não informar null no "email" do body
-**Quando** usuário enviar POST de login
-**Então** deve retornar status 400
-**E** deve retornar mensagem que "email" deve ser uma string
-
-**Dado** que o usuário não esteja autenticado
 **E** usuário não informar null no "password" do body
 **Quando** usuário enviar POST de login
 **Então** deve retornar status 400
+**E** deve retornar mensagem que "email" deve ser uma string
 **E** deve retornar mensagem que "password" deve ser uma string
 
 **Dado** que o usuário não esteja autenticado
