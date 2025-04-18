@@ -26,14 +26,16 @@
 ## API
 ### Login
 **Dado** que o usuário não esteja autenticado
-**Quando** preencher os dados de um usuário válido
+**Quando** preencher os dados de um email válido
+**E** preencher os dados de uma senha válida
 **Então** deve ser retornado status code 200
 **E** deve exibir mensagem de login com sucesso
 
 **Dado** que o usuário não esteja autenticado
-**Quando** preencher os dados de um usuário/senha inválido
+**Quando** preencher os dados de um email inválido
+**E** preencher os dados de uma senha válida
 **Então** deve ser retornado status code 401
-**E** deve exibir mensagem de usuário/senha inválido
+**E** deve exibir mensagem de usuário inválido
 
 **Dado** que o usuário não esteja autenticado
 **E** usuário não adicionar propriedade "email" ao body
@@ -83,6 +85,77 @@
 **Quando** usuário enviar POST de login
 **Então** deve retornar status 400
 **E** deve retornar mensagem que a propriedade não é permitida
+
+### Usuários
+**Dado** que tenha um usuário cadastrado
+**Quando** usuário enviar GET de usuários sem parâmetros
+**Então** deve retornar status 200
+**E** deve retornar lista de usuários cadastrados
+
+**Dado** que tenha um usuário cadastrado
+**Quando** usuário enviar GET de usuários com parâmetro "ID" válido
+**Então** deve retornar status 200
+**E** deve retornar apenas usuário com o ID correto
+
+**Dado** que tenha um usuário cadastrado
+**Quando** usuário enviar GET de usuários com parâmetro "nome" válido
+**Então** deve retornar status 200
+**E** deve retornar apenas usuários que contenham o parâmetro buscado no nome
+
+**Dado** que tenha um usuário cadastrado
+**Quando** usuário enviar GET de usuários com parâmetro "email" válido
+**Então** deve retornar status 200
+**E** deve retornar apenas usuários que contenham o valor do parâmetro buscado no e-mail
+
+**Dado** que tenha um usuário cadastrado
+**Quando** usuário enviar GET de usuários com parâmetro "password" válido
+**Então** deve retornar status 200
+**E** deve retornar apenas usuários que contenham o valor do parâmetro buscado no "password"
+
+**Dado** que tenha um usuário cadastrado
+**Quando** usuário enviar GET de usuários com parâmetro "administrador" true
+**Então** deve retornar status 200
+**E** deve retornar apenas usuários que são administradores
+
+**Dado** que tenha um usuário cadastrado
+**Quando** usuário enviar GET de usuários com parâmetro "administrador" false
+**Então** deve retornar status 200
+**E** deve retornar apenas usuários que não são administradores
+
+**Dado** que tenha um usuário cadastrado
+**Quando** usuário enviar GET de usuários com parâmetro "ID" inexistente
+**Então** deve retornar status 200
+**E** deve retornar lista de usuários zerada
+
+**Dado** que tenha um usuário cadastrado
+**Quando** usuário enviar GET de usuários com parâmetro "nome" inexistente
+**Então** deve retornar status 200
+**E** deve retornar lista de usuários zerada
+
+**Dado** que tenha um usuário cadastrado
+**Quando** usuário enviar GET de usuários com parâmetro "email" inexistente
+**Então** deve retornar status 200
+**E** deve retornar lista de usuários zerada
+
+**Dado** que tenha um usuário cadastrado
+**Quando** usuário enviar GET de usuários com parâmetro "email" inválido
+**Então** deve retornar status 400
+**E** deve retornar mensagem de email inválido
+
+**Dado** que tenha um usuário cadastrado
+**Quando** usuário enviar GET de usuários com parâmetro "password" inexistente
+**Então** deve retornar status 200
+**E** deve retornar lista de usuários zerada
+
+**Dado** que tenha um usuário cadastrado
+**Quando** usuário enviar GET de usuários com parâmetro "administrador" que não seja booleano
+**Então** deve retornar status 400
+**E** deve retornar mensagem que "amdministrador" deve ser booleano 
+
+**Dado** que tenha mais de um usuário cadastrado
+**Quando** usuário preencher dois parâmetros com usuários diferentes
+**Então** deve retornar status 200
+**E** deve retornar lista de usuários zerada
 
 ### 
 **Dado** que o usuário esteja autenticado
