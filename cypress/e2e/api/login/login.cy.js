@@ -38,21 +38,6 @@ describe('Usuário válido', () => {
 })
 
 describe('Body incompleto', () => {
-    it('Deve informar senha é obrigatório', () => {
-        cy.request({
-            method: 'POST',
-            url: `${Cypress.env('url')}/login`,
-            failOnStatusCode: false,
-            body: {
-                email: "fulano@qa.com"
-            }
-        }).then((response) => {
-            expect(response.status).to.eq(400)
-            expect(response.body).to.have.property("password")
-            expect(response.body.password).to.eq("password é obrigatório")
-        })
-    })
-
     it('Deve informar e-mail é obrigatório', () => {
         cy.request({
             method: 'POST',
@@ -67,5 +52,20 @@ describe('Body incompleto', () => {
             expect(response.body.email).to.eq("email é obrigatório")
         })
     })
+
+    it('Deve informar senha é obrigatório', () => {
+        cy.request({
+            method: 'POST',
+            url: `${Cypress.env('url')}/login`,
+            failOnStatusCode: false,
+            body: {
+                email: "fulano@qa.com"
+            }
+        }).then((response) => {
+            expect(response.status).to.eq(400)
+            expect(response.body).to.have.property("password")
+            expect(response.body.password).to.eq("password é obrigatório")
+        })
+    }) 
 })
 
