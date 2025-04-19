@@ -1,4 +1,4 @@
-import { usuarios } from "../../../../fixtures/usuariosTeste";
+import { usuarios } from "../../../fixtures/usuariosTeste";
 
 let idUsuario
 

@@ -3,23 +3,20 @@ import { usuarioSchema } from "../../../schemas/usuario";
 import { expectSchema } from "../../../support/e2e";
 import { usuariosAdm } from "../../../schemas/usuariosAdm";
 import { usuariosNaoAdm } from "../../../schemas/usuariosNaoAdm";
+import { usuarios } from "../../../fixtures/usuariosTeste";
 
 describe('Consulta de usuários', () => {
-    const nomeUsuario = "Michael Scott"
-    const emailUsuario = "michael.g.scott@teste.com"
-    const passwordUsuario = "michael@TheOffice.1234567890"
-    const admUsuario = true
     let idUsuario
 
     before(() => {
         cy.request('POST', `${Cypress.env('url')}/usuarios`, {
-            nome: nomeUsuario,
-            email: emailUsuario,
-            password: passwordUsuario,
-            administrador: `${admUsuario}`
+            nome: usuarios.usuario1.nome,
+            email: usuarios.usuario1.email,
+            password: usuarios.usuario1.password,
+            administrador: `${usuarios.usuario1.admUsuario}`
         });
 
-        cy.request('GET', `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(nomeUsuario)}`).then((response) => {
+        cy.request('GET', `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(usuarios.usuario1.nome)}`).then((response) => {
             idUsuario = response.body.usuarios[0]._id
         })
     })
@@ -47,10 +44,10 @@ describe('Consulta de usuários', () => {
             expect(response.status).to.eq(200);
             expect(response.body).to.be.an('object');
             expectSchema(response.body).to.be.jsonSchema(usuarioSchema);
-            expect(response.body.nome).to.be.eq(nomeUsuario)
-            expect(response.body.email).to.eq(emailUsuario);
-            expect(response.body.password).to.eq(passwordUsuario);
-            expect(response.body.administrador).to.eq(`${true}`);
+            expect(response.body.nome).to.be.eq(usuarios.usuario1.nome)
+            expect(response.body.email).to.eq(usuarios.usuario1.email);
+            expect(response.body.password).to.eq(usuarios.usuario1.password);
+            expect(response.body.administrador).to.eq(`${usuarios.usuario1.admUsuario}`);
             expect(response.body._id).to.eq(idUsuario);
         });
     });
@@ -63,10 +60,10 @@ describe('Consulta de usuários', () => {
             expect(response.status).to.eq(200);
             expect(response.body).to.be.an('object');
             expectSchema(response.body).to.be.jsonSchema(usuariosSchema);
-            expect(response.body.usuarios[0].nome).to.be.eq(nomeUsuario)
-            expect(response.body.usuarios[0].email).to.eq(emailUsuario);
-            expect(response.body.usuarios[0].password).to.eq(passwordUsuario);
-            expect(response.body.usuarios[0].administrador).to.eq(`${true}`);
+            expect(response.body.usuarios[0].nome).to.be.eq(usuarios.usuario1.nome)
+            expect(response.body.usuarios[0].email).to.eq(usuarios.usuario1.email);
+            expect(response.body.usuarios[0].password).to.eq(usuarios.usuario1.password);
+            expect(response.body.usuarios[0].administrador).to.eq(`${usuarios.usuario1.admUsuario}`);
             expect(response.body.usuarios[0]._id).to.eq(idUsuario);
         });
     })
@@ -74,15 +71,15 @@ describe('Consulta de usuários', () => {
     it('Deve retornar o usuário com o nome consultado', () => {
         cy.request({
             method: 'GET',
-            url: `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(nomeUsuario)}`
+            url: `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(usuarios.usuario1.nome)}`
         }).then((response) => {
             expect(response.status).to.eq(200);
             expect(response.body).to.be.an('object');
             expectSchema(response.body).to.be.jsonSchema(usuariosSchema);
-            expect(response.body.usuarios[0].nome).to.be.eq(nomeUsuario)
-            expect(response.body.usuarios[0].email).to.eq(emailUsuario);
-            expect(response.body.usuarios[0].password).to.eq(passwordUsuario);
-            expect(response.body.usuarios[0].administrador).to.eq(`${true}`);
+            expect(response.body.usuarios[0].nome).to.be.eq(usuarios.usuario1.nome)
+            expect(response.body.usuarios[0].email).to.eq(usuarios.usuario1.email);
+            expect(response.body.usuarios[0].password).to.eq(usuarios.usuario1.password);
+            expect(response.body.usuarios[0].administrador).to.eq(`${usuarios.usuario1.admUsuario}`);
             expect(response.body.usuarios[0]._id).to.eq(idUsuario);
         });
     })
@@ -90,14 +87,14 @@ describe('Consulta de usuários', () => {
     it('Deve retornar o usuário com o e-mail consultado', () => {
         cy.request({
             method: 'GET',
-            url: `${Cypress.env('url')}/usuarios?email=${encodeURIComponent(emailUsuario)}`
+            url: `${Cypress.env('url')}/usuarios?email=${encodeURIComponent(usuarios.usuario1.email)}`
         }).then((response) => {
             expect(response.status).to.eq(200);
             expect(response.body).to.be.an('object');
-            expect(response.body.usuarios[0].nome).to.be.eq(nomeUsuario);
-            expect(response.body.usuarios[0].email).to.eq(emailUsuario);
-            expect(response.body.usuarios[0].password).to.eq(passwordUsuario);
-            expect(response.body.usuarios[0].administrador).to.eq(`${true}`);
+            expect(response.body.usuarios[0].nome).to.be.eq(usuarios.usuario1.nome);
+            expect(response.body.usuarios[0].email).to.eq(usuarios.usuario1.email);
+            expect(response.body.usuarios[0].password).to.eq(usuarios.usuario1.password);
+            expect(response.body.usuarios[0].administrador).to.eq(`${usuarios.usuario1.admUsuario}`);
             expect(response.body.usuarios[0]._id).to.eq(idUsuario);
         });
     })
@@ -105,14 +102,14 @@ describe('Consulta de usuários', () => {
     it('Deve retornar o usuário com a senha consultado', () => {
         cy.request({
             method: 'GET',
-            url: `${Cypress.env('url')}/usuarios?password=${passwordUsuario}`
+            url: `${Cypress.env('url')}/usuarios?password=${usuarios.usuario1.password}`
         }).then((response) => {
             expect(response.status).to.eq(200);
             expect(response.body).to.be.an('object');
-            expect(response.body.usuarios[0].nome).to.be.eq(nomeUsuario);
-            expect(response.body.usuarios[0].email).to.eq(emailUsuario);
-            expect(response.body.usuarios[0].password).to.eq(passwordUsuario);
-            expect(response.body.usuarios[0].administrador).to.eq(`${true}`);
+            expect(response.body.usuarios[0].nome).to.be.eq(usuarios.usuario1.nome);
+            expect(response.body.usuarios[0].email).to.eq(usuarios.usuario1.email);
+            expect(response.body.usuarios[0].password).to.eq(usuarios.usuario1.password);
+            expect(response.body.usuarios[0].administrador).to.eq(`${usuarios.usuario1.admUsuario}`);
             expect(response.body.usuarios[0]._id).to.eq(idUsuario);
         });
     })
@@ -120,7 +117,7 @@ describe('Consulta de usuários', () => {
     it('Deve retornar o usuário com o parametro administrador true consultado', () => {
         cy.request({
             method: 'GET',
-            url: `${Cypress.env('url')}/usuarios?administrador=${admUsuario}`
+            url: `${Cypress.env('url')}/usuarios?administrador=${usuarios.usuario1.admUsuario}`
         }).then((response) => {
             expect(response.status).to.eq(200);
             expect(response.body).to.be.an('object');
@@ -274,38 +271,29 @@ describe("Consulta de usuários sem sucesso", () => {
 })
 
 describe("Consulta de dois usuários diferentes na mesma request", () => {
-    const nomeUsuario = "Michael Scott"
-    const emailUsuario = "michael.g.scott@teste.com"
-    const passwordUsuario = "michael@TheOffice.1234567890"
-    const admUsuario = true
     let idUsuario
-
-    const nomeUsuario2 = "Dwight Schrute"
-    const emailUsuario2 = "dwight.k.schrute@teste.com"
-    const passwordUsuario2 = "dwight@TheOffice.1234567890"
-    const admUsuario2 = false
     let idUsuario2
 
     before(() => {
         cy.request('POST', `${Cypress.env('url')}/usuarios`, {
-            nome: nomeUsuario,
-            email: emailUsuario,
-            password: passwordUsuario,
-            administrador: `${admUsuario}`
+            nome: usuarios.usuario1.nome,
+            email: usuarios.usuario1.email,
+            password: usuarios.usuario1.password,
+            administrador: `${usuarios.usuario1.admUsuario}`
         });
 
         cy.request('POST', `${Cypress.env('url')}/usuarios`, {
-            nome: nomeUsuario2,
-            email: emailUsuario2,
-            password: passwordUsuario2,
-            administrador: `${admUsuario2}`
+            nome: usuarios.usuario2.nome,
+            email: usuarios.usuario2.email,
+            password: usuarios.usuario2.password,
+            administrador: `${usuarios.usuario2.admUsuario}`
         });
 
-        cy.request('GET', `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(nomeUsuario)}`).then((response) => {
+        cy.request('GET', `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(usuarios.usuario1.nome)}`).then((response) => {
             idUsuario = response.body.usuarios[0]._id
         })
 
-        cy.request('GET', `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(nomeUsuario2)}`).then((response) => {
+        cy.request('GET', `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(usuarios.usuario2.nome)}`).then((response) => {
             idUsuario2 = response.body.usuarios[0]._id
         })
     })
@@ -318,7 +306,7 @@ describe("Consulta de dois usuários diferentes na mesma request", () => {
     it('Deve retornar lista zerada na busca de dois parametros diferentes', () => {
         cy.request({
             method: 'GET',
-            url: `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(nomeUsuario)}&email=${encodeURIComponent(emailUsuario2)}`
+            url: `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(usuarios.usuario1.nome)}&email=${encodeURIComponent(usuarios.usuario2.email)}`
         }).then((response) => {
             expect(response.status).to.eq(200);
             expect(response.body).to.be.an('object');
