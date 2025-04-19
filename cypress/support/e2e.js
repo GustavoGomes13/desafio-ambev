@@ -15,3 +15,10 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+
+import chai from 'chai';
+import chaiJsonSchema from 'chai-json-schema';
+
+chai.use(chaiJsonSchema);
+
+export const expectSchema = chai.expect;

@@ -111,9 +111,19 @@
 **E** deve retornar apenas usuários que não são administradores
 
 **Dado** que tenha um usuário cadastrado
-**Quando** usuário enviar GET de usuários com parâmetro "ID" inexistente
+**Quando** usuário enviar GET de usuários/ID com parâmetro "ID" inválido
+**Então** deve retornar status 400
+**E** deve retornar mensagem que id deve ser válido
+
+**Dado** que tenha um usuário cadastrado
+**Quando** usuário enviar GET de usuários/ID com parâmetro "ID" inexistente
+**Então** deve retornar status 400
+**E** deve retornar mensagem de usuário não encontrado
+
+**Dado** que tenha um usuário cadastrado
+**Quando** usuário enviar GET de /usuários com parâmetro "ID" inválido
 **Então** deve retornar status 200
-**E** deve retornar lista de usuários zerada
+**E** deve retornar lista zerada
 
 **Dado** que tenha um usuário cadastrado
 **Quando** usuário enviar GET de usuários com parâmetro "nome" inexistente
