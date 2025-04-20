@@ -1,25 +1,42 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+import { produtos } from "../fixtures/produtoTeste";
+import { seletoresFormLogin } from "../fixtures/seletoresLogin";
+import { usuarios } from "../fixtures/usuariosTeste";
+
+let idUsuario
+let idProduto
+
+Cypress.Commands.add('criarUsuario', () => {
+    cy.request('POST', `${Cypress.env('url')}/usuarios`, {
+        nome: usuarios.usuario1.nome,
+        email: usuarios.usuario1.email,
+        password: usuarios.usuario1.password,
+        administrador: `${usuarios.usuario1.admUsuario}`
+    });
+
+    cy.request('GET', `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(usuarios.usuario1.nome)}`).then((response) => {
+        idUsuario = response.body.usuarios[0]._id
+    });
+});
+
+Cypress.Commands.add('apagarUsuario', () => {
+    cy.request('DELETE', `${Cypress.env('url')}/usuarios/${idUsuario}`);
+});
+
+Cypress.Commands.add('autenticar', () => {
+    cy.visit(`${Cypress.env('baseURL')}/login`);
+    cy.get(seletoresFormLogin.campoEmail).type(usuarios.usuario1.email);
+    cy.get(seletoresFormLogin.campoSenha).type(usuarios.usuario1.password);
+    cy.get(seletoresFormLogin.btnEntrar).click();
+});
+
+Cypress.Commands.add('acessarCadProdutos', () => {
+    cy.get('[data-testid="cadastrar-produtos"]').click();
+});
+
+Cypress.Commands.add('apagarProduto', () => {
+    cy.request('GET', `${Cypress.env('url')}/produtos?nome=${encodeURIComponent(produtos.produto1.nome)}`).then((response) => {
+        idProduto = response.body.produto[0]._id
+    });
+
+    cy.request('DELETE', `${Cypress.env('url')}/produtos/${idProduto}`);
+});

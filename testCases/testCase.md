@@ -22,13 +22,7 @@
 **Então** deve exibir mensagens de e-mail/senha inválidos
 
 ---
-
-**Dado** que o usuário esteja autenticado
-**E** que tenha um usuário cadastrado
-**E** que o usuário esteja na tela de de lista de usuário
-**Quando** usuário clicar em editar de um usuário
-**Então** deve ser direcionado para tela de edição
-**E** deve permitir que o usuário altere os dados do usuário
+### Cadastro de usuários
 
 **Dado** que o usuário esteja autenticado
 **E** que o usuário esteja na tela de cadastro de produtos
@@ -36,6 +30,12 @@
 **E** o usuário clicar em cadastrar
 **Então** deve cadastrar um novo produto
 **E** deve exibir o produto na lista de produtos
+
+**Dado** que o usuário esteja autenticado
+**E** que o usuário esteja na tela de cadastro de produtos
+**Quando** usuário não preencher nenhum campo
+**E** usuário clicar em cadastrar
+**Então** deve exibir mensagens que os campos são obrigatórios
 
 ---
 
