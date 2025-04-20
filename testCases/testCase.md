@@ -4,8 +4,24 @@
 **Então** deve ser direcionado a home
 
 **Dado** que o usuário não esteja autenticado
-**Quando** preencher os dados de um usuário/senha inválido
-**Então** deve exibir mensagem de usuário/senha inválido
+**Quando** deixar o campo e-mail em branco
+**E** o usuário deixa o campo senha em branco
+**E** o usuário clicar em "Entrar"
+**Então** deve exibir mensagens que o e-mail e a senha não pode ficar em branco
+
+**Dado** que o usuário não esteja autenticado
+**Quando** preencer o e-mail com um e-mail inexistente
+**E** Preencher com uma senha correta
+**E** o usuário clicar em "Entrar"
+**Então** deve exibir mensagens de e-mail/senha inválidos
+
+**Dado** que o usuário não esteja autenticado
+**Quando** preencer o e-mail com um e-mail válido
+**E** Preencher com uma senha incorreta
+**E** o usuário clicar em "Entrar"
+**Então** deve exibir mensagens de e-mail/senha inválidos
+
+---
 
 **Dado** que o usuário esteja autenticado
 **E** que tenha um usuário cadastrado

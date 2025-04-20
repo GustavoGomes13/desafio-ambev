@@ -8,6 +8,7 @@ module.exports = defineConfig({
   },
 
   env: {
-    url: 'https://serverest.dev'
+    url: 'https://serverest.dev',
+    baseURL: 'https://front.serverest.dev'
   }
 });
