@@ -7,22 +7,14 @@ import { usuarios } from "../../../fixtures/usuariosTeste";
 
 describe('Consulta de usuários', () => {
     let idUsuario
-
     before(() => {
-        cy.request('POST', `${Cypress.env('url')}/usuarios`, {
-            nome: usuarios.usuario1.nome,
-            email: usuarios.usuario1.email,
-            password: usuarios.usuario1.password,
-            administrador: `${usuarios.usuario1.admUsuario}`
+        cy.criarUsuario().then((id) => {
+            idUsuario = id
         });
-
-        cy.request('GET', `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(usuarios.usuario1.nome)}`).then((response) => {
-            idUsuario = response.body.usuarios[0]._id
-        })
-    })
+    });
 
     after(() => {
-        cy.request('DELETE', `${Cypress.env('url')}/usuarios/${idUsuario}`)
+        cy.apagarUsuario(idUsuario);
     })
 
     it('Deve listar usuários', () => {   

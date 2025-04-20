@@ -2,9 +2,6 @@ import { produtos } from "../fixtures/produtoTeste";
 import { seletoresFormLogin } from "../fixtures/seletoresLogin";
 import { usuarios } from "../fixtures/usuariosTeste";
 
-let idUsuario
-let idProduto
-
 Cypress.Commands.add('criarUsuario', () => {
     cy.request('POST', `${Cypress.env('url')}/usuarios`, {
         nome: usuarios.usuario1.nome,
@@ -13,12 +10,13 @@ Cypress.Commands.add('criarUsuario', () => {
         administrador: `${usuarios.usuario1.admUsuario}`
     });
 
-    cy.request('GET', `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(usuarios.usuario1.nome)}`).then((response) => {
-        idUsuario = response.body.usuarios[0]._id
+    return cy.request('GET', `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(usuarios.usuario1.nome)}`).then((response) => {
+        const idUsuario = response.body.usuarios[0]._id
+        return cy.wrap(idUsuario);
     });
 });
 
-Cypress.Commands.add('apagarUsuario', () => {
+Cypress.Commands.add('apagarUsuario', (idUsuario) => {
     cy.request('DELETE', `${Cypress.env('url')}/usuarios/${idUsuario}`);
 });
 

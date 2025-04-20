@@ -4,20 +4,13 @@ let idUsuario
 
 describe('Edição de usuário', () => {
     beforeEach(() => {
-        cy.request('POST', `${Cypress.env('url')}/usuarios`, {
-            nome: usuarios.usuario1.nome,
-            email: usuarios.usuario1.email,
-            password: usuarios.usuario1.password,
-            administrador: `${usuarios.usuario1.admUsuario}`
-        });
-
-        cy.request('GET', `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(usuarios.usuario1.nome)}`).then((response) => {
-            idUsuario = response.body.usuarios[0]._id
+        cy.criarUsuario().then((id) => {
+            idUsuario = id
         });
     });
 
     afterEach(() => {
-        cy.request('DELETE', `${Cypress.env('url')}/usuarios/${idUsuario}`);
+        cy.apagarUsuario(idUsuario);
     });
 
     it('Deve editar o usuário', () => {
@@ -175,11 +168,8 @@ describe('Edição com e-mail já cadastrado', () => {
     let idUsuario2
 
     before(() => {
-        cy.request('POST', `${Cypress.env('url')}/usuarios`, {
-            nome: usuarios.usuario1.nome,
-            email: usuarios.usuario1.email,
-            password: usuarios.usuario1.password,
-            administrador: `${usuarios.usuario1.admUsuario}`
+        cy.criarUsuario().then((id) => {
+            idUsuario = id
         });
 
         cy.request('POST', `${Cypress.env('url')}/usuarios`, {
@@ -189,17 +179,13 @@ describe('Edição com e-mail já cadastrado', () => {
             administrador: `${usuarios.usuario2.admUsuario}`
         });
 
-        cy.request('GET', `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(usuarios.usuario1.nome)}`).then((response) => {
-            idUsuario = response.body.usuarios[0]._id
-        });
-
         cy.request('GET', `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(usuarios.usuario2.nome)}`).then((response) => {
             idUsuario2 = response.body.usuarios[0]._id
         });
     });
 
     after(() => {
-        cy.request('DELETE', `${Cypress.env('url')}/usuarios/${idUsuario}`);
+        cy.apagarUsuario(idUsuario);
         cy.request('DELETE', `${Cypress.env('url')}/usuarios/${idUsuario2}`);
     });
 

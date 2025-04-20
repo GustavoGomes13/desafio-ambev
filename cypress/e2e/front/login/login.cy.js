@@ -2,12 +2,15 @@ import { usuarios } from "../../../fixtures/usuariosTeste";
 import { seletoresFormLogin } from "../../../fixtures/seletoresLogin";
 
 describe('Testes de login', () => {
+    let idUsuario
     before(() => {
-        cy.criarUsuario();
+        cy.criarUsuario().then((id) => {
+            idUsuario = id
+        });
     });
 
     after(() => {
-        cy.apagarUsuario();
+        cy.apagarUsuario(idUsuario);
     });
 
     beforeEach(() => {
