@@ -1,0 +1,36 @@
+Dado que o usuário tenha um cadastro
+Quando o usuário enviar a requisição PUT editando o usuário cadastrado
+Então deve retornar status code 200
+E deve retornar mensagem de sucesso
+E ao consultar o usuário deve exibir dados atualizados
+
+Dado que o usuário tenha um cadastro
+Quando o usuario enviar a requisição PUT com um ID inexistente
+Então deve cadastrar um novo usuário
+E deve retornar status code 201
+E deve retornar ID e mensage de cadastro com sucesso
+
+Dado que o usuario 2 tenha um cadastro
+Quando o usuário enviar a requisição PUT editando o e-mail para outro e-mail já utilizado existente
+Então deve retornar status 400
+E deve retornar mensagem que o e-mail já está cadastrado
+
+Dado que o usuário tenha um cadastro
+Quando o usuario enviar a requisição PUT com o body vazio
+Então deve retornar status code 400
+E deve retornar mensagem com todos os campos obrigatórios
+
+Dado que o usuário tenha um cadastro
+Quando o usuario enviar a requisição PUT com propriedades com o tipo inválido
+Então deve retornar status code 400
+E deve retornar mensagem informando o tipo do campo
+
+Dado que o usuário tenha um cadastro
+Quando o usuário enviar um requisição PUT com propriedades inesperadas
+Então deve retornar status code 400
+E deve retornar mensagem informando que a propriedade não é permitida
+
+Dado que o usuário tenha um cadastro
+Quando o usuario enviar a requisição PUT com propriedades em branco
+Então deve retornar status code 400
+E deve retornar mensagem informando que as propriedades não podem ficar em branco
