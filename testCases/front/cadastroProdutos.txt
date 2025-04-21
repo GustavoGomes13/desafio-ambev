@@ -1,0 +1,18 @@
+Dado que o usuário esteja autenticado
+E que o usuário esteja na tela de cadastro de produtos
+Quando usuário preencher os campos obrigatórios
+E o usuário clicar em cadastrar
+Então deve cadastrar um novo produto
+E deve exibir o produto na lista de produtos
+
+Dado que o usuário esteja autenticado
+E que o usuário esteja na tela de cadastro de produtos
+Quando usuário não preencher nenhum campo
+E usuário clicar em cadastrar
+Então deve exibir mensagens que os campos são obrigatórios
+
+Dado que o usuário esteja autenticado
+E usuário já tem produto cadastrado
+E quando o usuário esteja na tela de cadastro de produtos
+Quando usuário tentar cadastrar produto com nome existente
+Então deve exibir mensagem informando que já existe produto com o nome
