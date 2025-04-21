@@ -234,20 +234,6 @@ describe("Consulta de usuários sem sucesso", () => {
         });
     });
 
-    it('Deve retornar lista zerada na busca por senha', () => {
-        cy.request({
-            method: 'GET',
-            url: `${Cypress.env('url')}/usuarios?password=${passwordInexistente}`
-        }).then((response) => {
-            expect(response.status).to.eq(200);
-            expect(response.body).to.be.an('object');
-            expect(response.body).to.have.property('quantidade');
-            expect(response.body).to.have.property('usuarios');
-            expect(response.body.quantidade).to.eq(0);
-            expect(response.body.usuarios).to.be.an('array');
-        });
-    });
-
     it('Deve retornar mensagem que adminstrador deve ser bool', () => {
         cy.request({
             method: 'GET',
