@@ -8,7 +8,7 @@ import { usuarios } from "../../../fixtures/usuariosTeste";
 describe('Consulta de usuários', () => {
     let idUsuario
     before(() => {
-        cy.criarUsuario().then((id) => {
+        cy.criarUsuario(usuarios.usuario1).then((id) => {
             idUsuario = id
         });
     });
@@ -267,32 +267,18 @@ describe("Consulta de dois usuários diferentes na mesma request", () => {
     let idUsuario2
 
     before(() => {
-        cy.request('POST', `${Cypress.env('url')}/usuarios`, {
-            nome: usuarios.usuario1.nome,
-            email: usuarios.usuario1.email,
-            password: usuarios.usuario1.password,
-            administrador: `${usuarios.usuario1.admUsuario}`
+        cy.criarUsuario(usuarios.usuario1).then((id) => {
+            idUsuario = id
         });
 
-        cy.request('POST', `${Cypress.env('url')}/usuarios`, {
-            nome: usuarios.usuario2.nome,
-            email: usuarios.usuario2.email,
-            password: usuarios.usuario2.password,
-            administrador: `${usuarios.usuario2.admUsuario}`
+        cy.criarUsuario(usuarios.usuario2).then((id) => {
+            idUsuario2 = id
         });
-
-        cy.request('GET', `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(usuarios.usuario1.nome)}`).then((response) => {
-            idUsuario = response.body.usuarios[0]._id
-        })
-
-        cy.request('GET', `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(usuarios.usuario2.nome)}`).then((response) => {
-            idUsuario2 = response.body.usuarios[0]._id
-        })
-    })
+    });
 
     after(() => {
-        cy.request('DELETE', `${Cypress.env('url')}/usuarios/${idUsuario}`)
-        cy.request('DELETE', `${Cypress.env('url')}/usuarios/${idUsuario2}`)
+        cy.apagarUsuario(idUsuario);
+        cy.apagarUsuario(idUsuario2);
     })
 
     it('Deve retornar lista zerada na busca de dois parametros diferentes', () => {

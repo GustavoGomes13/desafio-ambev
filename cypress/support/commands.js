@@ -1,17 +1,16 @@
 import { produtos } from "../fixtures/produtoTeste";
 import { seletoresFormLogin } from "../fixtures/seletoresLogin";
 import { usuarios } from "../fixtures/usuariosTeste";
+import { seletoresStore } from "../fixtures/seletoresStore";
 
-Cypress.Commands.add('criarUsuario', () => {
-    cy.request('POST', `${Cypress.env('url')}/usuarios`, {
-        nome: usuarios.usuario1.nome,
-        email: usuarios.usuario1.email,
-        password: usuarios.usuario1.password,
-        administrador: `${usuarios.usuario1.admUsuario}`
-    });
-
-    return cy.request('GET', `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(usuarios.usuario1.nome)}`).then((response) => {
-        const idUsuario = response.body.usuarios[0]._id
+Cypress.Commands.add('criarUsuario', (usuario) => {
+    return cy.request('POST', `${Cypress.env('url')}/usuarios`, {
+        nome: usuario.nome,
+        email: usuario.email,
+        password: usuario.password,
+        administrador: `${usuario.admUsuario}`
+    }).then((response) => {
+        const idUsuario = response.body._id;
         return cy.wrap(idUsuario);
     });
 });
@@ -20,10 +19,10 @@ Cypress.Commands.add('apagarUsuario', (idUsuario) => {
     cy.request('DELETE', `${Cypress.env('url')}/usuarios/${idUsuario}`);
 });
 
-Cypress.Commands.add('autenticar', () => {
-    cy.visit(`${Cypress.env('baseURL')}/login`);
-    cy.get(seletoresFormLogin.campoEmail).type(usuarios.usuario1.email);
-    cy.get(seletoresFormLogin.campoSenha).type(usuarios.usuario1.password);
+Cypress.Commands.add('autenticar', (usuario) => {
+    cy.visit('/login');
+    cy.get(seletoresFormLogin.campoEmail).type(usuario.email);
+    cy.get(seletoresFormLogin.campoSenha).type(usuario.password);
     cy.get(seletoresFormLogin.btnEntrar).click();
 });
 
@@ -31,18 +30,58 @@ Cypress.Commands.add('acessarCadProdutos', () => {
     cy.get('[data-testid="cadastrar-produtos"]').click();
 });
 
-Cypress.Commands.add('apagarProduto', () => {
-    cy.window().then((win) => {
-        const token = win.localStorage.getItem('serverest/userToken');
-        cy.request('GET', `${Cypress.env('url')}/produtos?nome=${encodeURIComponent(produtos.produto1.nome)}`).then((response) => {
-            const idProduto = response.body.produtos[0]._id
-            cy.request({
-                method: 'DELETE',
-                url: `${Cypress.env('url')}/produtos/${idProduto}`,
-                headers: {
-                    Authorization: `${token}`
-                }
-            });
+Cypress.Commands.add('criarProduto', () => {
+    return cy.request({
+        method: 'POST',
+        url: `${Cypress.env('url')}/login`,
+        body: {
+            email: usuarios.usuario1.email,
+            password: usuarios.usuario1.password
+        }
+    }).then((response) => {
+        const authToken = response.body.authorization;
+        
+        return cy.request({
+            method: 'POST', 
+            url: `${Cypress.env('url')}/produtos`,
+            headers: {
+                Authorization: `${authToken}`
+            },
+            body: {
+                nome: produtos.produto1.nome,
+                preco: produtos.produto1.preco,
+                descricao: produtos.produto1.descricao,
+                quantidade: produtos.produto1.quantidade
+            }
+        }).then((response) => {
+            const idProduto = response.body._id;
+            return cy.wrap(idProduto);
         });
     });
 });
+
+Cypress.Commands.add('apagarProduto', (idProduto) => {
+    console.log(idProduto)
+    cy.request({
+        method: 'POST',
+        url: `${Cypress.env('url')}/login`,
+        body: {
+            email: usuarios.usuario1.email,
+            password: usuarios.usuario1.password
+        }
+    }).then((response) => {
+        const authToken = response.body.authorization;
+        return cy.request({
+            method: 'DELETE', 
+            url: `${Cypress.env('url')}/produtos/${idProduto}`,
+            headers: {
+                Authorization: `${authToken}`
+            }
+        }); 
+    })
+});
+
+Cypress.Commands.add('pesquisarProduto', (nomeProduto) => {
+    cy.get(seletoresStore.barraPesquisa).type(nomeProduto);
+    cy.get(seletoresStore.btnPesquisar).click();
+})

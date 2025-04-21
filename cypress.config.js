@@ -2,19 +2,15 @@ const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
   e2e: {
-    watchForFileChanges: false,
-    experimentalStudio: false,
-
+    baseUrl: 'https://front.serverest.dev',
+    viewportWidth: 1280,
+    viewportHeight: 720,
     setupNodeEvents(on, config) {
-      on('dev-server:start', () => {
-        return Promise.resolve()
-      })
-      return config
+
     },
   },
 
   env: {
     url: 'https://serverest.dev',
-    baseURL: 'https://front.serverest.dev'
   }
 });

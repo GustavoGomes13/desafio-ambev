@@ -4,7 +4,7 @@ import { seletoresFormLogin } from "../../../fixtures/seletoresLogin";
 describe('Testes de login', () => {
     let idUsuario
     before(() => {
-        cy.criarUsuario().then((id) => {
+        cy.criarUsuario(usuarios.usuario1).then((id) => {
             idUsuario = id
         });
     });
@@ -14,7 +14,7 @@ describe('Testes de login', () => {
     });
 
     beforeEach(() => {
-        cy.visit(`${Cypress.env('baseURL')}/login`);
+        cy.visit('/login');
     })
 
     it('Login com sucesso', () => {

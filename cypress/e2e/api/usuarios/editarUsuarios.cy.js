@@ -4,7 +4,7 @@ let idUsuario
 
 describe('Edição de usuário', () => {
     beforeEach(() => {
-        cy.criarUsuario().then((id) => {
+        cy.criarUsuario(usuarios.usuario1).then((id) => {
             idUsuario = id
         });
     });
@@ -140,7 +140,7 @@ describe('Criação de usuário através do PUT', () => {
         cy.request('GET', `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(usuarios.usuario1.nome)}`).then((response) => {
             idUsuario = response.body.usuarios[0]._id
         });
-        cy.request('DELETE', `${Cypress.env('url')}/usuarios/${idUsuario}`);
+        cy.apagarUsuario(idUsuario);
     })
 
     it('Deve criar um novo usuário', () => {
@@ -168,7 +168,7 @@ describe('Edição com e-mail já cadastrado', () => {
     let idUsuario2
 
     before(() => {
-        cy.criarUsuario().then((id) => {
+        cy.criarUsuario(usuarios.usuario1).then((id) => {
             idUsuario = id
         });
 
@@ -186,7 +186,7 @@ describe('Edição com e-mail já cadastrado', () => {
 
     after(() => {
         cy.apagarUsuario(idUsuario);
-        cy.request('DELETE', `${Cypress.env('url')}/usuarios/${idUsuario2}`);
+        cy.apagarUsuario(idUsuario2);
     });
 
     it('Não deve permitir editar com um e-mail já cadastrado', () => {

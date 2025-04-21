@@ -3,7 +3,7 @@ import { usuarios } from "../../../fixtures/usuariosTeste";
 describe('Usuário válido', () => {
     let idUsuario
     before(() => {
-        cy.criarUsuario().then((id) => {
+        cy.criarUsuario(usuarios.usuario1).then((id) => {
             idUsuario = id
         });
     });
@@ -135,4 +135,3 @@ describe('Validações do body da request', () => {
         });
     });
 });
-

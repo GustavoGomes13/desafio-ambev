@@ -38,7 +38,44 @@
 **E** usuário clicar em cadastrar
 **Então** deve exibir mensagens que os campos são obrigatórios
 
+**Dado** que o usuário esteja autenticado
+**E** usuário já tem produto cadastrado
+**E** quando o usuário esteja na tela de cadastro de produtos
+**Quando** usuário tentar cadastrar produto com nome existente
+**Então** deve exibir mensagem informando que já existe produto com o nome
+
 ---
+
+### Store
+**Dado** que o usuário esteja autenticado com usuário não administrador
+**Quando** clicar no icone do carrinho
+**Então** deve ser direcionado para lista de compras
+
+**Dado** que o usuário esteja autenticado com usuário não administrador
+**E** que tenha produto cadastrado
+**Quando** o usuário pesquisa o produto
+**Então** deve ser exibido o produto com o termo pesquisado
+**E** deve exibir informações do produto (Imagem, nome, preço, botões)
+
+**Dado** que o usuário esteja autenticado com usuário não administrador
+**E** que tenha produto cadastrado
+**E** o usuário tenha feito uma pesquisa
+**Quando** o usuário apagar o termo pesquisado
+**E** o usuário pesquisar sem nenhum termo
+**Então** deve voltar a exibir todos os produtos
+
+**Dado** que o usuário esteja autenticado com usuário não administrador
+**E** que tenha produto cadastrado
+**Quando** o usuário pesquisar o produto
+**E** o usuário clicar em "Detalhes"
+**Então** deve ser direcionado a tela do produto
+**E** deve exibir todas as informações do produto
+
+**Dado** que o usuário esteja autenticado com usuário não administrador
+**E** que tenha produto cadastrado
+**Quando** o usuário clicar em "Adicionar a lista"
+**Então** deve ser direcionado a tela de lista de compras
+**E** o produto adicionado deve ser exibido
 
 ## API
 ### Login
