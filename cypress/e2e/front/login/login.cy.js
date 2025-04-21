@@ -14,8 +14,8 @@ describe('Testes de login', () => {
     });
 
     beforeEach(() => {
-        cy.visit(`${Cypress.env('baseURL')}/login`)
-    });
+        cy.visit(`${Cypress.env('baseURL')}/login`);
+    })
 
     it('Login com sucesso', () => {
         cy.get(seletoresFormLogin.campoEmail).type(usuarios.usuario1.email)
@@ -29,7 +29,7 @@ describe('Testes de login', () => {
     });
 
     it('Não deve logar com campos em branco', () => {
-        cy.get(seletoresFormLogin.btnEntrar).click()
+        cy.get(seletoresFormLogin.btnEntrar).click();
 
         cy.get('.alert').should('have.length', 2)
         cy.get('.alert:nth-child(3)').should('be.visible')

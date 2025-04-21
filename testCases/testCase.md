@@ -1,4 +1,5 @@
 ## Front
+### Login
 **Dado** que o usuário não esteja autenticado
 **Quando** preencher os dados de um usuário válido
 **Então** deve ser direcionado a home
@@ -22,8 +23,8 @@
 **Então** deve exibir mensagens de e-mail/senha inválidos
 
 ---
-### Cadastro de usuários
 
+### Cadastro de produtos
 **Dado** que o usuário esteja autenticado
 **E** que o usuário esteja na tela de cadastro de produtos
 **Quando** usuário preencher os campos obrigatórios

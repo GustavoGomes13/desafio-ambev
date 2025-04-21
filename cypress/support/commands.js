@@ -32,9 +32,17 @@ Cypress.Commands.add('acessarCadProdutos', () => {
 });
 
 Cypress.Commands.add('apagarProduto', () => {
-    cy.request('GET', `${Cypress.env('url')}/produtos?nome=${encodeURIComponent(produtos.produto1.nome)}`).then((response) => {
-        idProduto = response.body.produto[0]._id
+    cy.window().then((win) => {
+        const token = win.localStorage.getItem('serverest/userToken');
+        cy.request('GET', `${Cypress.env('url')}/produtos?nome=${encodeURIComponent(produtos.produto1.nome)}`).then((response) => {
+            const idProduto = response.body.produtos[0]._id
+            cy.request({
+                method: 'DELETE',
+                url: `${Cypress.env('url')}/produtos/${idProduto}`,
+                headers: {
+                    Authorization: `${token}`
+                }
+            });
+        });
     });
-
-    cy.request('DELETE', `${Cypress.env('url')}/produtos/${idProduto}`);
 });

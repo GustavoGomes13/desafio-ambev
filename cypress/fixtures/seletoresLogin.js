@@ -1,5 +1,5 @@
 export const seletoresFormLogin = {
-    campoEmail: '#email',
-    campoSenha: '#password',
+    campoEmail: '[data-testid="email"]',
+    campoSenha: '[data-testid="senha"]',
     btnEntrar: '[data-testid="entrar"]'
 }

@@ -1,16 +1,19 @@
 import { produtos } from "../../../fixtures/produtoTeste";
 import { seletoresProdutos } from "../../../fixtures/seletoresProdutos";
 
+let idUsuario
 describe('Cadastro de produtos', () => {
     before(() => {
-        cy.criarUsuario();
+        cy.criarUsuario().then((id) => {
+            idUsuario = id
+        });
         cy.autenticar();
         cy.acessarCadProdutos();
     });
 
     after(() => {
         cy.apagarProduto();
-        cy.apagarUsuario();
+        cy.apagarUsuario(idUsuario);
     });
 
     it('Deve cadastrar um produto', () => {
@@ -25,10 +28,41 @@ describe('Cadastro de produtos', () => {
         cy.url().should('include', '/listarprodutos');
         cy.contains('Lista dos Produtos').should('be.visible');
         cy.get(seletoresProdutos.listaProdutos.tabelaProdutos).should('be.visible');
-        cy.get('.table > tbody > tr > td:nth-child(1):has-text("Companion Cube")').should('be.visible');
+        cy.get('tbody tr td').contains(produtos.produto1.nome).should('be.visible');
+    });
+});
+
+describe('Não deve cadastrar produtos', () => {
+    before(() => {
+        cy.criarUsuario().then((id) => {
+            idUsuario = id
+        });
+        cy.autenticar();
+        cy.acessarCadProdutos();
     });
 
-    // it('Não deve cadastrar um produto', () => {
-        
-    // })
+    after(() => {
+        cy.apagarUsuario(idUsuario);
+    });
+
+    it('Não deve cadastrar um produto', () => {
+        cy.get(seletoresProdutos.cadProdutos.btnCadastrar).click();
+
+        const msgErro = [
+            'Nome é obrigatório',
+            'Preço é obrigatório',
+            'Descrição é obrigatório',
+            'Quantidade é obrigatório',
+            'Imagem é obrigatório'
+          ];
+          
+          cy.get('.alert').should('have.length', msgErro.length).each(($alert, index) => {
+            cy.wrap($alert)
+              .should('have.css', 'background-color', 'rgb(243, 150, 154)');
+            
+            cy.wrap($alert)
+              .find('span')
+              .should('have.text', msgErro[index]);
+          });
+    });
 });
