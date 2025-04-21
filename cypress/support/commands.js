@@ -4,16 +4,28 @@ import { usuarios } from "../fixtures/usuariosTeste";
 import { seletoresStore } from "../fixtures/seletoresStore";
 
 Cypress.Commands.add('criarUsuario', (usuario) => {
-    return cy.request('POST', `${Cypress.env('url')}/usuarios`, {
-        nome: usuario.nome,
-        email: usuario.email,
-        password: usuario.password,
-        administrador: `${usuario.admUsuario}`
+    return cy.request({
+        method: 'GET',
+        url: `${Cypress.env('url')}/usuarios?nome=${encodeURIComponent(usuario.nome)}`,
+        failOnStatusCode: false
     }).then((response) => {
-        const idUsuario = response.body._id;
-        return cy.wrap(idUsuario);
+        if (response.body.quantidade > 0) {
+            const idUsuarioExistente = response.body.usuarios[0]._id;
+            return cy.wrap(idUsuarioExistente);
+        } else {
+            return cy.request('POST', `${Cypress.env('url')}/usuarios`, {
+                nome: usuario.nome,
+                email: usuario.email,
+                password: usuario.password,
+                administrador: `${usuario.admUsuario}`
+            }).then((response) => {
+                const idUsuario = response.body._id;
+                return cy.wrap(idUsuario);
+            });
+        }
     });
 });
+
 
 Cypress.Commands.add('apagarUsuario', (idUsuario) => {
     cy.request('DELETE', `${Cypress.env('url')}/usuarios/${idUsuario}`);
@@ -40,25 +52,37 @@ Cypress.Commands.add('criarProduto', () => {
         }
     }).then((response) => {
         const authToken = response.body.authorization;
-        
+
         return cy.request({
-            method: 'POST', 
-            url: `${Cypress.env('url')}/produtos`,
-            headers: {
-                Authorization: `${authToken}`
-            },
-            body: {
-                nome: produtos.produto1.nome,
-                preco: produtos.produto1.preco,
-                descricao: produtos.produto1.descricao,
-                quantidade: produtos.produto1.quantidade
-            }
+            method: 'GET',
+            url: `${Cypress.env('url')}/produtos?nome=${encodeURIComponent(produtos.produto1.nome)}`,
+            failOnStatusCode: false
         }).then((response) => {
-            const idProduto = response.body._id;
-            return cy.wrap(idProduto);
+            if (response.body.quantidade > 0) {
+                const idProdutoExistente = response.body.produtos[0]._id;
+                return cy.wrap(idProdutoExistente);
+            } else {
+                return cy.request({
+                    method: 'POST',
+                    url: `${Cypress.env('url')}/produtos`,
+                    headers: {
+                        Authorization: `${authToken}`
+                    },
+                    body: {
+                        nome: produtos.produto1.nome,
+                        preco: produtos.produto1.preco,
+                        descricao: produtos.produto1.descricao,
+                        quantidade: produtos.produto1.quantidade
+                    }
+                }).then((response) => {
+                    const idProduto = response.body._id;
+                    return cy.wrap(idProduto);
+                });
+            }
         });
     });
 });
+
 
 Cypress.Commands.add('apagarProduto', (idProduto) => {
     console.log(idProduto)
