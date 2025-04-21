@@ -59,11 +59,7 @@ Escolha a spec que deseja rodar no menu da interface.
 ---
 
 ## 🖊️ Comentários sobre os testes
-
-- Os testes foram construídos como o uso hipotético de um teste de regressão:
-  - Fluxo de login validado com e2e por API
-  - Os cenários não foram escolhidos para que fosse complementares, mas que pudessem apresentar maiores diferenças na criação dos 
-  
+ 
 - Caso de teste com erro:
   - O caso de teste `Não deve cadastrar um produto vazio` do cenário `Não deve cadastrar produtos` irá apresentar erro durante o teste
     - Padrão da própria tela define o campo imagem como obrigatório
