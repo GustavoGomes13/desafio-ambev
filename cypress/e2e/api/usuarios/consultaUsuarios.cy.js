@@ -15,7 +15,7 @@ describe('Consulta de usuários', () => {
 
     after(() => {
         cy.apagarUsuario(idUsuario);
-    })
+    });
 
     it('Deve listar usuários', () => {   
         cy.request({
@@ -58,7 +58,7 @@ describe('Consulta de usuários', () => {
             expect(response.body.usuarios[0].administrador).to.eq(`${usuarios.usuario1.admUsuario}`);
             expect(response.body.usuarios[0]._id).to.eq(idUsuario);
         });
-    })
+    });
 
     it('Deve retornar o usuário com o nome consultado', () => {
         cy.request({
@@ -74,7 +74,7 @@ describe('Consulta de usuários', () => {
             expect(response.body.usuarios[0].administrador).to.eq(`${usuarios.usuario1.admUsuario}`);
             expect(response.body.usuarios[0]._id).to.eq(idUsuario);
         });
-    })
+    });
 
     it('Deve retornar o usuário com o e-mail consultado', () => {
         cy.request({
@@ -89,7 +89,7 @@ describe('Consulta de usuários', () => {
             expect(response.body.usuarios[0].administrador).to.eq(`${usuarios.usuario1.admUsuario}`);
             expect(response.body.usuarios[0]._id).to.eq(idUsuario);
         });
-    })
+    });
 
     it('Deve retornar o usuário com a senha consultado', () => {
         cy.request({
@@ -104,7 +104,7 @@ describe('Consulta de usuários', () => {
             expect(response.body.usuarios[0].administrador).to.eq(`${usuarios.usuario1.admUsuario}`);
             expect(response.body.usuarios[0]._id).to.eq(idUsuario);
         });
-    })
+    });
 
     it('Deve retornar o usuário com o parametro administrador true consultado', () => {
         cy.request({
@@ -114,13 +114,8 @@ describe('Consulta de usuários', () => {
             expect(response.status).to.eq(200);
             expect(response.body).to.be.an('object');
             expectSchema(response.body).to.be.jsonSchema(usuariosAdm);
-            // expect(response.body.usuarios[0].nome).to.be.eq(nomeUsuario);
-            // expect(response.body.usuarios[0].email).to.eq(emailUsuario);
-            // expect(response.body.usuarios[0].password).to.eq(passwordUsuario);
-            // expect(response.body.usuarios[0].administrador).to.eq(`${true}`);
-            // expect(response.body.usuarios[0]._id).to.eq(idUsuario);
         });
-    })
+    });
 
     it('Deve retornar o usuário com o parametro administrador false consultado', () => {
         cy.request({
@@ -131,7 +126,7 @@ describe('Consulta de usuários', () => {
             expect(response.body).to.be.an('object');
             expectSchema(response.body).to.be.jsonSchema(usuariosNaoAdm);
         });
-    })
+    });
 });
 
 describe("Consulta de usuários sem sucesso", () => {
@@ -150,7 +145,7 @@ describe("Consulta de usuários sem sucesso", () => {
             expect(response.body).to.have.property('id');
             expect(response.body.id).to.eq("id deve ter exatamente 16 caracteres alfanuméricos")
         });
-    })
+    });
 
     it('Deve retornar mensagem de usuário não encontrado', () => {
         cy.request({
@@ -246,7 +241,7 @@ describe("Consulta de usuários sem sucesso", () => {
             expect(response.body.administrador).to.eq("administrador deve ser 'true' ou 'false'");
         });
     });
-})
+});
 
 describe("Consulta de dois usuários diferentes na mesma request", () => {
     let idUsuario
@@ -265,7 +260,7 @@ describe("Consulta de dois usuários diferentes na mesma request", () => {
     after(() => {
         cy.apagarUsuario(idUsuario);
         cy.apagarUsuario(idUsuario2);
-    })
+    });
 
     it('Deve retornar lista zerada na busca de dois parametros diferentes', () => {
         cy.request({
@@ -280,4 +275,4 @@ describe("Consulta de dois usuários diferentes na mesma request", () => {
             expect(response.body.usuarios).to.be.an('array');
         });
     });
-})
+});
